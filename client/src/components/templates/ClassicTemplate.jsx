@@ -1,381 +1,363 @@
-import { Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
+import {
+    Mail,
+    Phone,
+    MapPin,
+    Linkedin,
+    Globe,
+    Github,
+    ExternalLink,
+} from "lucide-react";
 
 const ClassicTemplate = ({ data, accentColor }) => {
+
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
 
         const [year, month] = dateStr.split("-");
 
-        if (!year || !month) return dateStr;
-
-        return new Date(Number(year), Number(month) - 1).toLocaleDateString(
-            "en-US",
-            {
-                year: "numeric",
-                month: "short",
-            }
-        );
+        return new Date(year, month - 1).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+        });
     };
 
-    const personalInfo = data?.personal_info || {};
+    const normalizeUrl = (url) => {
+        if (!url) return "";
+
+        return url.startsWith("http://") || url.startsWith("https://")
+            ? url
+            : `https://${url}`;
+    };
 
     return (
-        <div
-            id="classic-resume"
-            className="w-full bg-white text-gray-800"
-            style={{
-                fontFamily:
-                    "Arial, Helvetica, sans-serif",
-            }}
-        >
-            <div className="px-8 py-8 sm:px-10 sm:py-9">
+        <div className="max-w-4xl mx-auto p-8 bg-white text-gray-800 leading-relaxed">
 
-                {/* ================= HEADER ================= */}
-                <header
-                    className="pb-5 mb-6 border-b-2"
-                    style={{ borderColor: accentColor }}
+            {/* ================= HEADER ================= */}
+            <header
+                className="text-center mb-8 pb-6 border-b-2"
+                style={{ borderColor: accentColor }}
+            >
+                <h1
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: accentColor }}
                 >
-                    <div className="text-center">
+                    {data.personal_info?.full_name || "Your Name"}
+                </h1>
 
-                        <h1
-                            className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight"
+                <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+
+                    {data.personal_info?.email && (
+                        <div className="flex items-center gap-1">
+                            <Mail className="size-4" />
+                            <span>{data.personal_info.email}</span>
+                        </div>
+                    )}
+
+                    {data.personal_info?.phone && (
+                        <div className="flex items-center gap-1">
+                            <Phone className="size-4" />
+                            <span>{data.personal_info.phone}</span>
+                        </div>
+                    )}
+
+                    {data.personal_info?.location && (
+                        <div className="flex items-center gap-1">
+                            <MapPin className="size-4" />
+                            <span>{data.personal_info.location}</span>
+                        </div>
+                    )}
+
+                    {data.personal_info?.linkedin && (
+                        <a
+                            href={normalizeUrl(data.personal_info.linkedin)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:underline"
                             style={{ color: accentColor }}
                         >
-                            {personalInfo.full_name || "Your Name"}
-                        </h1>
+                            <Linkedin className="size-4" />
+                            <span className="break-all">
+                                {data.personal_info.linkedin}
+                            </span>
+                        </a>
+                    )}
 
-                        {personalInfo.profession && (
-                            <p className="mt-1.5 text-sm font-medium text-gray-600">
-                                {personalInfo.profession}
-                            </p>
-                        )}
+                    {data.personal_info?.website && (
+                        <a
+                            href={normalizeUrl(data.personal_info.website)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:underline"
+                            style={{ color: accentColor }}
+                        >
+                            <Globe className="size-4" />
+                            <span className="break-all">
+                                {data.personal_info.website}
+                            </span>
+                        </a>
+                    )}
 
-                        {/* Contact Information */}
-                        <div className="mt-4 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-600">
+                </div>
+            </header>
 
-                            {personalInfo.email && (
-                                <div className="flex items-center gap-1.5 min-w-0">
-                                    <Mail
-                                        className="size-3.5 shrink-0"
-                                        style={{ color: accentColor }}
-                                    />
-                                    <span className="break-all">
-                                        {personalInfo.email}
-                                    </span>
-                                </div>
-                            )}
 
-                            {personalInfo.phone && (
-                                <div className="flex items-center gap-1.5">
-                                    <Phone
-                                        className="size-3.5 shrink-0"
-                                        style={{ color: accentColor }}
-                                    />
-                                    <span>{personalInfo.phone}</span>
-                                </div>
-                            )}
+            {/* ================= PROFESSIONAL SUMMARY ================= */}
+            {data.professional_summary && (
+                <section className="mb-6">
 
-                            {personalInfo.location && (
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin
-                                        className="size-3.5 shrink-0"
-                                        style={{ color: accentColor }}
-                                    />
-                                    <span>{personalInfo.location}</span>
-                                </div>
-                            )}
+                    <h2
+                        className="text-xl font-semibold mb-3"
+                        style={{ color: accentColor }}
+                    >
+                        PROFESSIONAL SUMMARY
+                    </h2>
 
-                            {personalInfo.linkedin && (
-                                <div className="flex items-center gap-1.5 min-w-0">
-                                    <Linkedin
-                                        className="size-3.5 shrink-0"
-                                        style={{ color: accentColor }}
-                                    />
-                                    <span className="break-all">
-                                        {personalInfo.linkedin}
-                                    </span>
-                                </div>
-                            )}
+                    <p className="text-gray-700 leading-relaxed">
+                        {data.professional_summary}
+                    </p>
 
-                            {personalInfo.website && (
-                                <div className="flex items-center gap-1.5 min-w-0">
-                                    <Globe
-                                        className="size-3.5 shrink-0"
-                                        style={{ color: accentColor }}
-                                    />
-                                    <span className="break-all">
-                                        {personalInfo.website}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </header>
+                </section>
+            )}
 
-                {/* ================= SUMMARY ================= */}
-                {data.professional_summary?.trim() && (
-                    <section className="mb-6">
-                        <SectionHeading
-                            title="PROFESSIONAL SUMMARY"
-                            accentColor={accentColor}
-                        />
 
-                        <p className="text-sm leading-6 text-gray-700">
-                            {data.professional_summary}
-                        </p>
-                    </section>
-                )}
+            {/* ================= EXPERIENCE ================= */}
+            {data.experience && data.experience.length > 0 && (
+                <section className="mb-6">
 
-                {/* ================= EXPERIENCE ================= */}
-                {data.experience?.length > 0 && (
-                    <section className="mb-6">
-                        <SectionHeading
-                            title="PROFESSIONAL EXPERIENCE"
-                            accentColor={accentColor}
-                        />
+                    <h2
+                        className="text-xl font-semibold mb-4"
+                        style={{ color: accentColor }}
+                    >
+                        PROFESSIONAL EXPERIENCE
+                    </h2>
 
-                        <div className="space-y-5">
-                            {data.experience.map((exp, index) => (
-                                <div
-                                    key={index}
-                                    className="relative pl-4 border-l-2"
-                                    style={{
-                                        borderColor: accentColor,
-                                    }}
-                                >
-                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                    <div className="space-y-4">
 
-                                        <div className="min-w-0">
-                                            {exp.position && (
-                                                <h3 className="text-base font-bold text-gray-900">
-                                                    {exp.position}
-                                                </h3>
-                                            )}
+                        {data.experience.map((exp, index) => (
 
-                                            {exp.company && (
-                                                <p className="text-sm font-semibold text-gray-600">
-                                                    {exp.company}
-                                                </p>
-                                            )}
-                                        </div>
+                            <div
+                                key={index}
+                                className="border-l-3 pl-4"
+                                style={{ borderColor: accentColor }}
+                            >
 
-                                        {(exp.start_date ||
-                                            exp.end_date ||
-                                            exp.is_current) && (
-                                            <p className="shrink-0 text-xs sm:text-sm font-medium text-gray-500 sm:text-right">
-                                                {formatDate(exp.start_date)}
-                                                {exp.start_date && " - "}
-                                                {exp.is_current
-                                                    ? "Present"
-                                                    : formatDate(exp.end_date)}
-                                            </p>
-                                        )}
-                                    </div>
+                                <div className="flex justify-between items-start mb-2">
 
-                                    {exp.description?.trim() && (
-                                        <div className="mt-2 text-sm leading-6 text-gray-700 whitespace-pre-line">
-                                            {exp.description}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* ================= PROJECTS ================= */}
-                {data.project?.length > 0 && (
-                    <section className="mb-6">
-                        <SectionHeading
-                            title="PROJECTS"
-                            accentColor={accentColor}
-                        />
-
-                        <div className="space-y-4">
-                            {data.project.map((project, index) => (
-                                <div
-                                    key={index}
-                                    className="relative pl-4 border-l-2 border-gray-200"
-                                >
                                     <div>
-                                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                                            {project.name && (
-                                                <h3 className="text-sm font-bold text-gray-900">
-                                                    {project.name}
-                                                </h3>
-                                            )}
+                                        <h3 className="font-semibold text-gray-900">
+                                            {exp.position}
+                                        </h3>
 
-                                            {project.type && (
-                                                <span
-                                                    className="text-xs font-medium"
-                                                    style={{
-                                                        color: accentColor,
-                                                    }}
-                                                >
-                                                    {project.type}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        {project.description?.trim() && (
-                                            <p className="mt-1.5 text-sm leading-6 text-gray-700">
-                                                {project.description}
-                                            </p>
-                                        )}
+                                        <p className="text-gray-700 font-medium">
+                                            {exp.company}
+                                        </p>
                                     </div>
+
+                                    <div className="text-right text-sm text-gray-600">
+                                        <p>
+                                            {formatDate(exp.start_date)} -{" "}
+                                            {exp.is_current
+                                                ? "Present"
+                                                : formatDate(exp.end_date)}
+                                        </p>
+                                    </div>
+
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
 
-                {/* ================= EDUCATION ================= */}
-                {data.education?.length > 0 && (
-                    <section className="mb-6">
-                        <SectionHeading
-                            title="EDUCATION"
-                            accentColor={accentColor}
-                        />
-
-                        <div className="space-y-4">
-                            {data.education.map((edu, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1"
-                                >
-                                    <div className="min-w-0">
-
-                                        {(edu.degree || edu.field) && (
-                                            <h3 className="text-sm font-bold text-gray-900">
-                                                {edu.degree}
-
-                                                {edu.field && (
-                                                    <>
-                                                        {" "}
-                                                        <span className="font-medium">
-                                                            in {edu.field}
-                                                        </span>
-                                                    </>
-                                                )}
-                                            </h3>
-                                        )}
-
-                                        {edu.institution && (
-                                            <p className="text-sm font-medium text-gray-600">
-                                                {edu.institution}
-                                            </p>
-                                        )}
-
-                                        {edu.gpa && (
-                                            <p className="mt-0.5 text-xs text-gray-500">
-                                                GPA: {edu.gpa}
-                                            </p>
-                                        )}
+                                {exp.description && (
+                                    <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+                                        {exp.description}
                                     </div>
+                                )}
 
-                                    {edu.graduation_date && (
-                                        <p className="shrink-0 text-xs sm:text-sm font-medium text-gray-500 sm:text-right">
-                                            {formatDate(
-                                                edu.graduation_date
-                                            )}
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                </section>
+            )}
+
+
+            {/* ================= PROJECTS ================= */}
+            {data.project && data.project.length > 0 && (
+                <section className="mb-6">
+
+                    <h2
+                        className="text-xl font-semibold mb-4"
+                        style={{ color: accentColor }}
+                    >
+                        PROJECTS
+                    </h2>
+
+                    <div className="space-y-4">
+
+                        {data.project.map((proj, index) => (
+
+                            <div
+                                key={index}
+                                className="border-l-3 border-gray-300 pl-6"
+                            >
+
+                                {/* Project Name + Type */}
+                                <div className="flex flex-wrap items-center gap-2 mb-1">
+
+                                    <h3 className="font-semibold text-gray-800">
+                                        {proj.name}
+                                    </h3>
+
+                                    {proj.type && (
+                                        <span
+                                            className="text-xs px-2 py-0.5 rounded-full"
+                                            style={{
+                                                color: accentColor,
+                                                backgroundColor: `${accentColor}15`,
+                                            }}
+                                        >
+                                            {proj.type}
+                                        </span>
+                                    )}
+
+                                </div>
+
+
+                                {/* Project Description */}
+                                {proj.description && (
+                                    <p className="text-gray-600 leading-relaxed">
+                                        {proj.description}
+                                    </p>
+                                )}
+
+
+                                {/* Project Links */}
+                                {(proj.github || proj.live_demo) && (
+                                    <div className="flex flex-wrap items-center gap-4 mt-3">
+
+                                        {/* GitHub */}
+                                        {proj.github && (
+                                            <a
+                                                href={normalizeUrl(proj.github)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+                                                style={{ color: accentColor }}
+                                            >
+                                                <Github className="size-4" />
+                                                <span>GitHub Repository</span>
+                                            </a>
+                                        )}
+
+
+                                        {/* Live Demo */}
+                                        {proj.live_demo && (
+                                            <a
+                                                href={normalizeUrl(proj.live_demo)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+                                                style={{ color: accentColor }}
+                                            >
+                                                <ExternalLink className="size-4" />
+                                                <span>Live Demo</span>
+                                            </a>
+                                        )}
+
+                                    </div>
+                                )}
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                </section>
+            )}
+
+
+            {/* ================= EDUCATION ================= */}
+            {data.education && data.education.length > 0 && (
+                <section className="mb-6">
+
+                    <h2
+                        className="text-xl font-semibold mb-4"
+                        style={{ color: accentColor }}
+                    >
+                        EDUCATION
+                    </h2>
+
+                    <div className="space-y-3">
+
+                        {data.education.map((edu, index) => (
+
+                            <div
+                                key={index}
+                                className="flex justify-between items-start"
+                            >
+
+                                <div>
+
+                                    <h3 className="font-semibold text-gray-900">
+                                        {edu.degree}{" "}
+                                        {edu.field && `in ${edu.field}`}
+                                    </h3>
+
+                                    <p className="text-gray-700">
+                                        {edu.institution}
+                                    </p>
+
+                                    {edu.gpa && (
+                                        <p className="text-sm text-gray-600">
+                                            GPA: {edu.gpa}
                                         </p>
                                     )}
+
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
 
-                {/* ================= SKILLS ================= */}
-                {data.skills?.length > 0 && (
-                    <section className="mb-2">
-                        <SectionHeading
-                            title="CORE SKILLS"
-                            accentColor={accentColor}
-                        />
-
-                        <div className="flex flex-wrap gap-x-4 gap-y-2">
-                            {data.skills.map((skill, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center gap-1.5 text-sm text-gray-700"
-                                >
-                                    <span
-                                        className="w-1.5 h-1.5 rounded-full shrink-0"
-                                        style={{
-                                            backgroundColor: accentColor,
-                                        }}
-                                    />
-                                    <span>{skill}</span>
+                                <div className="text-sm text-gray-600">
+                                    <p>
+                                        {formatDate(edu.graduation_date)}
+                                    </p>
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
-            </div>
 
-            {/* ================= PRINT STYLES ================= */}
-            <style>
-                {`
-                    #classic-resume {
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
-                    }
+                            </div>
 
-                    #classic-resume section,
-                    #classic-resume header,
-                    #classic-resume .space-y-5 > div,
-                    #classic-resume .space-y-4 > div {
-                        break-inside: avoid;
-                    }
+                        ))}
 
-                    @media print {
-                        #classic-resume {
-                            width: 100%;
-                            margin: 0;
-                            box-shadow: none !important;
-                        }
+                    </div>
 
-                        #classic-resume > div {
-                            padding: 0.55in 0.6in;
-                        }
-
-                        #classic-resume h1 {
-                            font-size: 26px;
-                        }
-
-                        #classic-resume section {
-                            margin-bottom: 16px;
-                        }
-
-                        #classic-resume p {
-                            orphans: 3;
-                            widows: 3;
-                        }
-                    }
-                `}
-            </style>
-        </div>
-    );
-};
+                </section>
+            )}
 
 
-/* ================= SECTION HEADING ================= */
+            {/* ================= SKILLS ================= */}
+            {data.skills && data.skills.length > 0 && (
+                <section className="mb-6">
 
-const SectionHeading = ({ title, accentColor }) => {
-    return (
-        <div className="mb-3 flex items-center gap-3">
-            <h2
-                className="text-sm font-bold tracking-wide whitespace-nowrap"
-                style={{ color: accentColor }}
-            >
-                {title}
-            </h2>
+                    <h2
+                        className="text-xl font-semibold mb-4"
+                        style={{ color: accentColor }}
+                    >
+                        CORE SKILLS
+                    </h2>
 
-            <div
-                className="h-px flex-1 opacity-25"
-                style={{ backgroundColor: accentColor }}
-            />
+                    <div className="flex gap-4 flex-wrap">
+
+                        {data.skills.map((skill, index) => (
+                            <div
+                                key={index}
+                                className="text-gray-700"
+                            >
+                                • {skill}
+                            </div>
+                        ))}
+
+                    </div>
+
+                </section>
+            )}
+
         </div>
     );
 };

@@ -4,9 +4,12 @@ import {
     MapPin,
     Linkedin,
     Globe,
+    Github,
+    ExternalLink,
 } from "lucide-react";
 
 const ModernTemplate = ({ data, accentColor }) => {
+
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
 
@@ -25,18 +28,20 @@ const ModernTemplate = ({ data, accentColor }) => {
 
     const personalInfo = data?.personal_info || {};
 
-    const cleanUrl = (url, type) => {
+    const cleanUrl = (url) => {
         if (!url) return "";
-
-        if (type === "linkedin") {
-            return url
-                .replace(/^https?:\/\/(www\.)?/, "")
-                .replace(/\/$/, "");
-        }
 
         return url
             .replace(/^https?:\/\/(www\.)?/, "")
             .replace(/\/$/, "");
+    };
+
+    const normalizeUrl = (url) => {
+        if (!url) return "";
+
+        return url.startsWith("http://") || url.startsWith("https://")
+            ? url
+            : `https://${url}`;
     };
 
     return (
@@ -47,6 +52,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                 fontFamily: "Arial, Helvetica, sans-serif",
             }}
         >
+
             {/* ================= HEADER ================= */}
             <header
                 className="px-8 py-8 sm:px-10"
@@ -54,6 +60,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                     backgroundColor: accentColor,
                 }}
             >
+
                 <div className="flex flex-col gap-4">
 
                     <div>
@@ -68,12 +75,14 @@ const ModernTemplate = ({ data, accentColor }) => {
                         )}
                     </div>
 
+
                     {/* Contact Information */}
                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-white/95">
 
                         {personalInfo.email && (
                             <div className="flex items-center gap-1.5 min-w-0">
                                 <Mail className="size-3.5 shrink-0" />
+
                                 <span className="break-all">
                                     {personalInfo.email}
                                 </span>
@@ -83,6 +92,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                         {personalInfo.phone && (
                             <div className="flex items-center gap-1.5">
                                 <Phone className="size-3.5 shrink-0" />
+
                                 <span>
                                     {personalInfo.phone}
                                 </span>
@@ -92,6 +102,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                         {personalInfo.location && (
                             <div className="flex items-center gap-1.5">
                                 <MapPin className="size-3.5 shrink-0" />
+
                                 <span>
                                     {personalInfo.location}
                                 </span>
@@ -100,7 +111,7 @@ const ModernTemplate = ({ data, accentColor }) => {
 
                         {personalInfo.linkedin && (
                             <a
-                                href={personalInfo.linkedin}
+                                href={normalizeUrl(personalInfo.linkedin)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 min-w-0 hover:opacity-80 transition-opacity"
@@ -108,17 +119,14 @@ const ModernTemplate = ({ data, accentColor }) => {
                                 <Linkedin className="size-3.5 shrink-0" />
 
                                 <span className="break-all">
-                                    {cleanUrl(
-                                        personalInfo.linkedin,
-                                        "linkedin"
-                                    )}
+                                    {cleanUrl(personalInfo.linkedin)}
                                 </span>
                             </a>
                         )}
 
                         {personalInfo.website && (
                             <a
-                                href={personalInfo.website}
+                                href={normalizeUrl(personalInfo.website)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 min-w-0 hover:opacity-80 transition-opacity"
@@ -126,16 +134,16 @@ const ModernTemplate = ({ data, accentColor }) => {
                                 <Globe className="size-3.5 shrink-0" />
 
                                 <span className="break-all">
-                                    {cleanUrl(
-                                        personalInfo.website,
-                                        "website"
-                                    )}
+                                    {cleanUrl(personalInfo.website)}
                                 </span>
                             </a>
                         )}
+
                     </div>
                 </div>
+
             </header>
+
 
             {/* ================= CONTENT ================= */}
             <main className="px-8 py-8 sm:px-10">
@@ -143,6 +151,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                 {/* ================= SUMMARY ================= */}
                 {data.professional_summary?.trim() && (
                     <section className="mb-7">
+
                         <ModernSectionHeading
                             title="PROFESSIONAL SUMMARY"
                             accentColor={accentColor}
@@ -151,23 +160,29 @@ const ModernTemplate = ({ data, accentColor }) => {
                         <p className="text-sm leading-6 text-gray-700">
                             {data.professional_summary}
                         </p>
+
                     </section>
                 )}
+
 
                 {/* ================= EXPERIENCE ================= */}
                 {data.experience?.length > 0 && (
                     <section className="mb-7">
+
                         <ModernSectionHeading
                             title="EXPERIENCE"
                             accentColor={accentColor}
                         />
 
                         <div className="space-y-5">
+
                             {data.experience.map((exp, index) => (
+
                                 <div
                                     key={index}
                                     className="relative pl-5"
                                 >
+
                                     {/* Timeline line */}
                                     <div
                                         className="absolute left-0 top-1.5 bottom-0 w-0.5"
@@ -187,6 +202,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
 
                                         <div className="min-w-0">
+
                                             {exp.position && (
                                                 <h3 className="text-base font-bold text-gray-900">
                                                     {exp.position}
@@ -203,11 +219,13 @@ const ModernTemplate = ({ data, accentColor }) => {
                                                     {exp.company}
                                                 </p>
                                             )}
+
                                         </div>
 
                                         {(exp.start_date ||
                                             exp.end_date ||
                                             exp.is_current) && (
+
                                             <span
                                                 className="w-fit shrink-0 rounded-full px-2.5 py-1 text-xs font-medium"
                                                 style={{
@@ -215,19 +233,16 @@ const ModernTemplate = ({ data, accentColor }) => {
                                                     color: accentColor,
                                                 }}
                                             >
-                                                {formatDate(
-                                                    exp.start_date
-                                                )}
+                                                {formatDate(exp.start_date)}
 
                                                 {exp.start_date && " - "}
 
                                                 {exp.is_current
                                                     ? "Present"
-                                                    : formatDate(
-                                                          exp.end_date
-                                                      )}
+                                                    : formatDate(exp.end_date)}
                                             </span>
                                         )}
+
                                     </div>
 
                                     {exp.description?.trim() && (
@@ -235,26 +250,35 @@ const ModernTemplate = ({ data, accentColor }) => {
                                             {exp.description}
                                         </div>
                                     )}
+
                                 </div>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
 
                 {/* ================= PROJECTS ================= */}
                 {data.project?.length > 0 && (
                     <section className="mb-7">
+
                         <ModernSectionHeading
                             title="PROJECTS"
                             accentColor={accentColor}
                         />
 
                         <div className="space-y-4">
+
                             {data.project.map((project, index) => (
+
                                 <div
                                     key={index}
                                     className="relative pl-5"
                                 >
+
                                     <div
                                         className="absolute left-0 top-1.5 bottom-0 w-0.5"
                                         style={{
@@ -270,7 +294,10 @@ const ModernTemplate = ({ data, accentColor }) => {
                                     />
 
                                     <div>
+
+                                        {/* Project Name + Type */}
                                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+
                                             {project.name && (
                                                 <h3 className="text-sm font-bold text-gray-900">
                                                     {project.name}
@@ -287,19 +314,66 @@ const ModernTemplate = ({ data, accentColor }) => {
                                                     • {project.type}
                                                 </span>
                                             )}
+
                                         </div>
 
+
+                                        {/* Description */}
                                         {project.description?.trim() && (
                                             <p className="mt-1.5 text-sm leading-6 text-gray-700">
                                                 {project.description}
                                             </p>
                                         )}
+
+
+                                        {/* GitHub + Live Demo */}
+                                        {(project.github || project.live_demo) && (
+                                            <div className="flex flex-wrap items-center gap-4 mt-3">
+
+                                                {project.github && (
+                                                    <a
+                                                        href={normalizeUrl(project.github)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+                                                        style={{
+                                                            color: accentColor,
+                                                        }}
+                                                    >
+                                                        <Github className="size-4" />
+                                                        <span>GitHub Repository</span>
+                                                    </a>
+                                                )}
+
+                                                {project.live_demo && (
+                                                    <a
+                                                        href={normalizeUrl(project.live_demo)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+                                                        style={{
+                                                            color: accentColor,
+                                                        }}
+                                                    >
+                                                        <ExternalLink className="size-4" />
+                                                        <span>Live Demo</span>
+                                                    </a>
+                                                )}
+
+                                            </div>
+                                        )}
+
                                     </div>
+
                                 </div>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
 
                 {/* ================= EDUCATION + SKILLS ================= */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -307,16 +381,21 @@ const ModernTemplate = ({ data, accentColor }) => {
                     {/* Education */}
                     {data.education?.length > 0 && (
                         <section>
+
                             <ModernSectionHeading
                                 title="EDUCATION"
                                 accentColor={accentColor}
                             />
 
                             <div className="space-y-4">
+
                                 {data.education.map((edu, index) => (
+
                                     <div key={index}>
+
                                         {(edu.degree || edu.field) && (
                                             <h3 className="text-sm font-bold text-gray-900">
+
                                                 {edu.degree}
 
                                                 {edu.field && (
@@ -325,6 +404,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                                                         in {edu.field}
                                                     </span>
                                                 )}
+
                                             </h3>
                                         )}
 
@@ -340,6 +420,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                                         )}
 
                                         <div className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-gray-500">
+
                                             {edu.graduation_date && (
                                                 <span>
                                                     {formatDate(
@@ -353,23 +434,32 @@ const ModernTemplate = ({ data, accentColor }) => {
                                                     GPA: {edu.gpa}
                                                 </span>
                                             )}
+
                                         </div>
+
                                     </div>
+
                                 ))}
+
                             </div>
+
                         </section>
                     )}
+
 
                     {/* Skills */}
                     {data.skills?.length > 0 && (
                         <section>
+
                             <ModernSectionHeading
                                 title="SKILLS"
                                 accentColor={accentColor}
                             />
 
                             <div className="flex flex-wrap gap-2">
+
                                 {data.skills.map((skill, index) => (
+
                                     <span
                                         key={index}
                                         className="px-2.5 py-1 rounded-md text-xs font-medium border"
@@ -381,12 +471,18 @@ const ModernTemplate = ({ data, accentColor }) => {
                                     >
                                         {skill}
                                     </span>
+
                                 ))}
+
                             </div>
+
                         </section>
                     )}
+
                 </div>
+
             </main>
+
 
             {/* ================= PRINT STYLES ================= */}
             <style>
@@ -434,6 +530,7 @@ const ModernTemplate = ({ data, accentColor }) => {
                     }
                 `}
             </style>
+
         </div>
     );
 };
@@ -444,6 +541,7 @@ const ModernTemplate = ({ data, accentColor }) => {
 const ModernSectionHeading = ({ title, accentColor }) => {
     return (
         <div className="flex items-center gap-3 mb-3">
+
             <h2
                 className="text-sm font-bold tracking-[0.08em] whitespace-nowrap"
                 style={{ color: accentColor }}
@@ -457,6 +555,7 @@ const ModernSectionHeading = ({ title, accentColor }) => {
                     backgroundColor: `${accentColor}35`,
                 }}
             />
+
         </div>
     );
 };

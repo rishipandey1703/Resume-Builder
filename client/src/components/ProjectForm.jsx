@@ -3,67 +3,66 @@ import {
   Plus,
   Trash2,
   Tag,
-  FileText
-} from 'lucide-react'
-import React from 'react'
+  FileText,
+  Github,
+  ExternalLink,
+} from "lucide-react";
+import React from "react";
 
 const ProjectForm = ({ data, onChange }) => {
-
   const addProject = () => {
     const newProject = {
-      name: '',
-      type: '',
-      description: ''
-    }
+      name: "",
+      type: "",
+      description: "",
+      github: "",
+      live_demo: "",
+    };
 
-    onChange([...(data || []), newProject])
-  }
+    onChange([...(data || []), newProject]);
+  };
 
   const removeProject = (index) => {
-    const updated = data.filter((_, i) => i !== index)
-    onChange(updated)
-  }
+    const updated = data.filter((_, i) => i !== index);
+    onChange(updated);
+  };
 
   const updateProject = (index, field, value) => {
-    const updated = [...data]
+    const updated = [...(data || [])];
 
     updated[index] = {
       ...updated[index],
-      [field]: value
-    }
+      [field]: value,
+    };
 
-    onChange(updated)
-  }
+    onChange(updated);
+  };
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-
         <div className="flex items-start gap-3">
-
-          <div className="
+          <div
+            className="
             flex items-center justify-center
             size-10
             rounded-xl
             bg-green-50
             text-green-600
             shrink-0
-          ">
+          "
+          >
             <FolderGit2 className="size-5" />
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Projects
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900">Projects</h3>
 
             <p className="text-sm text-gray-500 mt-1">
               Showcase projects that demonstrate your skills and experience.
             </p>
           </div>
-
         </div>
 
         <button
@@ -86,13 +85,12 @@ const ProjectForm = ({ data, onChange }) => {
           <Plus className="size-4" />
           Add Project
         </button>
-
       </div>
 
       {/* Empty State */}
-      {(!data || data.length === 0) ? (
-
-        <div className="
+      {!data || data.length === 0 ? (
+        <div
+          className="
           border border-dashed
           border-gray-300
           rounded-xl
@@ -100,9 +98,10 @@ const ProjectForm = ({ data, onChange }) => {
           py-12
           px-6
           text-center
-        ">
-
-          <div className="
+        "
+        >
+          <div
+            className="
             mx-auto
             flex items-center justify-center
             size-14
@@ -111,7 +110,8 @@ const ProjectForm = ({ data, onChange }) => {
             border border-gray-200
             text-gray-400
             shadow-sm
-          ">
+          "
+          >
             <FolderGit2 className="size-6" />
           </div>
 
@@ -143,16 +143,11 @@ const ProjectForm = ({ data, onChange }) => {
             <Plus className="size-4" />
             Add your first project
           </button>
-
         </div>
-
       ) : (
-
         /* Project Cards */
         <div className="space-y-5">
-
           {data.map((project, index) => (
-
             <div
               key={index}
               className="
@@ -165,25 +160,26 @@ const ProjectForm = ({ data, onChange }) => {
                 transition-shadow
               "
             >
-
               {/* Card Header */}
-              <div className="
+              <div
+                className="
                 flex items-center justify-between
                 px-5 py-4
                 bg-gray-50/70
                 border-b border-gray-100
-              ">
-
+              "
+              >
                 <div className="flex items-center gap-3">
-
-                  <div className="
+                  <div
+                    className="
                     flex items-center justify-center
                     size-9
                     rounded-lg
                     bg-white
                     border border-gray-200
                     text-green-600
-                  ">
+                  "
+                  >
                     <FolderGit2 className="size-4" />
                   </div>
 
@@ -193,10 +189,9 @@ const ProjectForm = ({ data, onChange }) => {
                     </p>
 
                     <p className="text-xs text-gray-500 mt-0.5">
-                      {project.name || 'Add your project details'}
+                      {project.name || "Add your project details"}
                     </p>
                   </div>
-
                 </div>
 
                 <button
@@ -216,19 +211,18 @@ const ProjectForm = ({ data, onChange }) => {
                 >
                   <Trash2 className="size-4" />
                 </button>
-
               </div>
 
               {/* Card Body */}
               <div className="p-5 space-y-5">
-
                 {/* Project Name */}
                 <div className="space-y-1.5">
-
-                  <label className="
+                  <label
+                    className="
                     flex items-center gap-2
                     text-sm font-medium text-gray-700
-                  ">
+                  "
+                  >
                     <FolderGit2 className="size-4 text-gray-400" />
                     Project Name
                     <span className="text-red-500">*</span>
@@ -236,13 +230,9 @@ const ProjectForm = ({ data, onChange }) => {
 
                   <input
                     type="text"
-                    value={project.name || ''}
+                    value={project.name || ""}
                     onChange={(e) =>
-                      updateProject(
-                        index,
-                        'name',
-                        e.target.value
-                      )
+                      updateProject(index, "name", e.target.value)
                     }
                     placeholder="e.g. Smart Safar"
                     className="
@@ -261,29 +251,25 @@ const ProjectForm = ({ data, onChange }) => {
                       focus:ring-green-500/10
                     "
                   />
-
                 </div>
 
                 {/* Project Type */}
                 <div className="space-y-1.5">
-
-                  <label className="
+                  <label
+                    className="
                     flex items-center gap-2
                     text-sm font-medium text-gray-700
-                  ">
+                  "
+                  >
                     <Tag className="size-4 text-gray-400" />
                     Project Type
                   </label>
 
                   <input
                     type="text"
-                    value={project.type || ''}
+                    value={project.type || ""}
                     onChange={(e) =>
-                      updateProject(
-                        index,
-                        'type',
-                        e.target.value
-                      )
+                      updateProject(index, "type", e.target.value)
                     }
                     placeholder="e.g. AI / Web Application / Hackathon"
                     className="
@@ -302,16 +288,16 @@ const ProjectForm = ({ data, onChange }) => {
                       focus:ring-green-500/10
                     "
                   />
-
                 </div>
 
                 {/* Description */}
                 <div className="space-y-1.5">
-
-                  <label className="
+                  <label
+                    className="
                     flex items-center gap-2
                     text-sm font-medium text-gray-700
-                  ">
+                  "
+                  >
                     <FileText className="size-4 text-gray-400" />
                     Project Description
                     <span className="text-red-500">*</span>
@@ -319,13 +305,9 @@ const ProjectForm = ({ data, onChange }) => {
 
                   <textarea
                     rows={5}
-                    value={project.description || ''}
+                    value={project.description || ""}
                     onChange={(e) =>
-                      updateProject(
-                        index,
-                        'description',
-                        e.target.value
-                      )
+                      updateProject(index, "description", e.target.value)
                     }
                     placeholder="Describe what you built, the technologies you used, and the impact or results..."
                     className="
@@ -348,77 +330,144 @@ const ProjectForm = ({ data, onChange }) => {
                   />
 
                   <div className="flex justify-between items-center gap-3">
-
                     <p className="text-xs text-gray-400">
-                      Focus on your contribution, technologies, and measurable results.
+                      Focus on your contribution, technologies, and measurable
+                      results.
                     </p>
 
                     <span className="text-xs text-gray-400 shrink-0">
                       {project.description?.length || 0} characters
                     </span>
-
                   </div>
-
                 </div>
 
+                {/* Project Links */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* GitHub Repository */}
+                  <div className="space-y-1.5">
+                    <label
+                      className="
+                      flex items-center gap-2
+                      text-sm font-medium text-gray-700
+                    "
+                    >
+                      <Github className="size-4 text-gray-400" />
+                      GitHub Repository
+                    </label>
+
+                    <input
+                      type="url"
+                      value={project.github || ""}
+                      onChange={(e) =>
+                        updateProject(index, "github", e.target.value)
+                      }
+                      placeholder="https://github.com/username/project"
+                      className="
+                        w-full
+                        px-3.5 py-2.5
+                        text-sm
+                        text-gray-800
+                        bg-white
+                        border border-gray-300
+                        rounded-lg
+                        outline-none
+                        placeholder:text-gray-400
+                        transition-all
+                        focus:border-green-500
+                        focus:ring-4
+                        focus:ring-green-500/10
+                      "
+                    />
+                  </div>
+
+                  {/* Live Demo */}
+                  <div className="space-y-1.5">
+                    <label
+                      className="
+                      flex items-center gap-2
+                      text-sm font-medium text-gray-700
+                    "
+                    >
+                      <ExternalLink className="size-4 text-gray-400" />
+                      Live Demo
+                    </label>
+
+                    <input
+                      type="url"
+                      value={project.live_demo || ""}
+                      onChange={(e) =>
+                        updateProject(index, "live_demo", e.target.value)
+                      }
+                      placeholder="https://your-project.vercel.app"
+                      className="
+                        w-full
+                        px-3.5 py-2.5
+                        text-sm
+                        text-gray-800
+                        bg-white
+                        border border-gray-300
+                        rounded-lg
+                        outline-none
+                        placeholder:text-gray-400
+                        transition-all
+                        focus:border-green-500
+                        focus:ring-4
+                        focus:ring-green-500/10
+                      "
+                    />
+                  </div>
+                </div>
               </div>
-
             </div>
-
           ))}
-
         </div>
-
       )}
 
       {/* Resume Tip */}
       {data && data.length > 0 && (
-        <div className="
+        <div
+          className="
           rounded-xl
           border border-green-100
           bg-green-50/50
           px-4 py-3
-        ">
-
+        "
+        >
           <div className="flex items-start gap-3">
-
-            <div className="
+            <div
+              className="
               flex items-center justify-center
               size-8
               rounded-lg
               bg-green-100
               text-green-600
               shrink-0
-            ">
+            "
+            >
               <FolderGit2 className="size-4" />
             </div>
 
             <div>
+              <p className="text-sm font-medium text-green-900">Project tip</p>
 
-              <p className="text-sm font-medium text-green-900">
-                Project tip
-              </p>
-
-              <p className="
+              <p
+                className="
                 text-xs
                 text-green-700/80
                 mt-1
                 leading-relaxed
-              ">
+              "
+              >
                 Highlight 2–4 of your strongest projects. Mention the
-                technologies used, what you personally built, and the
-                result or impact whenever possible.
+                technologies used, what you personally built, and the result or
+                impact whenever possible.
               </p>
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
-  )
-}
+  );
+};
 
-export default ProjectForm
+export default ProjectForm;

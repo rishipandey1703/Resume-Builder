@@ -1,4 +1,10 @@
+import {
+    Github,
+    ExternalLink,
+} from "lucide-react";
+
 const MinimalTemplate = ({ data, accentColor }) => {
+
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
 
@@ -25,6 +31,14 @@ const MinimalTemplate = ({ data, accentColor }) => {
             .replace(/\/$/, "");
     };
 
+    const normalizeUrl = (url) => {
+        if (!url) return "";
+
+        return url.startsWith("http://") || url.startsWith("https://")
+            ? url
+            : `https://${url}`;
+    };
+
     return (
         <div
             id="minimal-resume"
@@ -33,6 +47,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
                 fontFamily: "Arial, Helvetica, sans-serif",
             }}
         >
+
             <div className="px-8 py-9 sm:px-10 sm:py-10">
 
                 {/* ================= HEADER ================= */}
@@ -52,7 +67,9 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                 {personalInfo.profession}
                             </p>
                         )}
+
                     </div>
+
 
                     {/* Contact Information */}
                     <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs sm:text-sm text-gray-500">
@@ -73,7 +90,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
 
                         {personalInfo.linkedin && (
                             <a
-                                href={personalInfo.linkedin}
+                                href={normalizeUrl(personalInfo.linkedin)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="break-all hover:underline"
@@ -85,7 +102,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
 
                         {personalInfo.website && (
                             <a
-                                href={personalInfo.website}
+                                href={normalizeUrl(personalInfo.website)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="break-all hover:underline"
@@ -94,7 +111,9 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                 {cleanUrl(personalInfo.website)}
                             </a>
                         )}
+
                     </div>
+
 
                     {/* Accent line */}
                     <div
@@ -103,32 +122,42 @@ const MinimalTemplate = ({ data, accentColor }) => {
                             backgroundColor: accentColor,
                         }}
                     />
+
                 </header>
+
 
                 {/* ================= SUMMARY ================= */}
                 {data.professional_summary?.trim() && (
                     <section className="mb-8">
+
                         <p className="max-w-3xl text-sm leading-6 text-gray-700">
                             {data.professional_summary}
                         </p>
+
                     </section>
                 )}
+
 
                 {/* ================= EXPERIENCE ================= */}
                 {data.experience?.length > 0 && (
                     <section className="mb-8">
+
                         <MinimalHeading
                             title="EXPERIENCE"
                             accentColor={accentColor}
                         />
 
                         <div className="space-y-6">
+
                             {data.experience.map((exp, index) => (
+
                                 <div
                                     key={index}
                                     className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-x-6 gap-y-1"
                                 >
+
                                     <div>
+
                                         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
 
                                             {exp.position && (
@@ -147,6 +176,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                                     {exp.company}
                                                 </span>
                                             )}
+
                                         </div>
 
                                         {exp.description?.trim() && (
@@ -154,12 +184,16 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                                 {exp.description}
                                             </div>
                                         )}
+
                                     </div>
+
 
                                     {(exp.start_date ||
                                         exp.end_date ||
                                         exp.is_current) && (
+
                                         <div className="text-xs sm:text-sm text-gray-500 sm:text-right whitespace-nowrap">
+
                                             {formatDate(exp.start_date)}
 
                                             {exp.start_date && " — "}
@@ -167,24 +201,33 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                             {exp.is_current
                                                 ? "Present"
                                                 : formatDate(exp.end_date)}
+
                                         </div>
                                     )}
+
                                 </div>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
 
                 {/* ================= PROJECTS ================= */}
                 {data.project?.length > 0 && (
                     <section className="mb-8">
+
                         <MinimalHeading
                             title="PROJECTS"
                             accentColor={accentColor}
                         />
 
                         <div className="space-y-5">
+
                             {data.project.map((project, index) => (
+
                                 <div key={index}>
 
                                     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -205,37 +248,87 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                                 {project.type}
                                             </span>
                                         )}
+
                                     </div>
+
 
                                     {project.description?.trim() && (
                                         <p className="mt-1.5 text-sm leading-6 text-gray-700">
                                             {project.description}
                                         </p>
                                     )}
+
+
+                                    {/* Project Links */}
+                                    {(project.github || project.live_demo) && (
+                                        <div className="flex flex-wrap items-center gap-4 mt-2.5">
+
+                                            {project.github && (
+                                                <a
+                                                    href={normalizeUrl(project.github)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+                                                    style={{
+                                                        color: accentColor,
+                                                    }}
+                                                >
+                                                    <Github className="size-3.5" />
+                                                    <span>GitHub Repository</span>
+                                                </a>
+                                            )}
+
+                                            {project.live_demo && (
+                                                <a
+                                                    href={normalizeUrl(project.live_demo)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
+                                                    style={{
+                                                        color: accentColor,
+                                                    }}
+                                                >
+                                                    <ExternalLink className="size-3.5" />
+                                                    <span>Live Demo</span>
+                                                </a>
+                                            )}
+
+                                        </div>
+                                    )}
+
                                 </div>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
 
                 {/* ================= EDUCATION ================= */}
                 {data.education?.length > 0 && (
                     <section className="mb-8">
+
                         <MinimalHeading
                             title="EDUCATION"
                             accentColor={accentColor}
                         />
 
                         <div className="space-y-5">
+
                             {data.education.map((edu, index) => (
+
                                 <div
                                     key={index}
                                     className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-x-6 gap-y-1"
                                 >
+
                                     <div>
 
                                         {(edu.degree || edu.field) && (
                                             <h3 className="text-sm font-bold text-gray-900">
+
                                                 {edu.degree}
 
                                                 {edu.field && (
@@ -244,6 +337,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                                         in {edu.field}
                                                     </span>
                                                 )}
+
                                             </h3>
                                         )}
 
@@ -258,35 +352,48 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                                 GPA: {edu.gpa}
                                             </p>
                                         )}
+
                                     </div>
+
 
                                     {edu.graduation_date && (
                                         <span className="text-xs sm:text-sm text-gray-500 sm:text-right whitespace-nowrap">
+
                                             {formatDate(
                                                 edu.graduation_date
                                             )}
+
                                         </span>
                                     )}
+
                                 </div>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
 
                 {/* ================= SKILLS ================= */}
                 {data.skills?.length > 0 && (
                     <section>
+
                         <MinimalHeading
                             title="SKILLS"
                             accentColor={accentColor}
                         />
 
                         <div className="flex flex-wrap gap-x-5 gap-y-2">
+
                             {data.skills.map((skill, index) => (
+
                                 <span
                                     key={index}
                                     className="flex items-center gap-1.5 text-sm text-gray-700"
                                 >
+
                                     <span
                                         className="h-1.5 w-1.5 rounded-full"
                                         style={{
@@ -295,12 +402,18 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                     />
 
                                     {skill}
+
                                 </span>
+
                             ))}
+
                         </div>
+
                     </section>
                 )}
+
             </div>
+
 
             {/* ================= PRINT STYLES ================= */}
             <style>
@@ -318,6 +431,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
                     }
 
                     @media print {
+
                         #minimal-resume {
                             width: 100%;
                             margin: 0;
@@ -336,9 +450,11 @@ const MinimalTemplate = ({ data, accentColor }) => {
                             orphans: 3;
                             widows: 3;
                         }
+
                     }
                 `}
             </style>
+
         </div>
     );
 };
@@ -347,6 +463,7 @@ const MinimalTemplate = ({ data, accentColor }) => {
 /* ================= SECTION HEADING ================= */
 
 const MinimalHeading = ({ title, accentColor }) => {
+
     return (
         <div className="mb-4 flex items-center gap-3">
 
@@ -365,6 +482,7 @@ const MinimalHeading = ({ title, accentColor }) => {
                     backgroundColor: `${accentColor}30`,
                 }}
             />
+
         </div>
     );
 };
